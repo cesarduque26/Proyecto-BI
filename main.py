@@ -3,15 +3,9 @@ from flask import Flask, render_template
 app = Flask(__name__) 
 
 data = {
-         'titulo01': 'fundamentdos e flask',
+         'titulo': 'fundamentdos e flask',
          'descripcion01': 'cesar',
-         'titulo02': 'fundamentdos e flask',
-         'descripcion02': 'cesar',
-         'titulo01': 'fundamentdos e flask',
-         'descripcion01': 'cesar',
-         'titulo01': 'fundamentdos e flask',
-         'descripcion01': 'cesar',
-         'edad': 23
+         
     }
 def index():
     # return render_template('index.html',titulo='cesar duque') #render_template es para renderizar un archivo html y tambien se le puede pasar variables
