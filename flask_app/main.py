@@ -17,11 +17,13 @@ print(f'Se ha creado una matriz BOW de tamaño {bow.shape}.')
 def index():
     return render_template('index.html')
 
-# @app.route('/buscar', methods=['POST'])
-# def buscar():
-#     consulta = request.form['consulta']
+@app.route('/buscar', methods=['POST'])
+def buscar():
+    consulta = request.form['consulta']
+    print(consulta)
 #     resultados = fun.procesar_y_buscar(consulta)
 #     return render_template('resultados.html', consulta=consulta, resultados=resultados)
+    return f"Consulta recibida: {consulta}"
 
 
 if __name__ == '__main__':

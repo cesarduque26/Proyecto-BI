@@ -27,6 +27,14 @@ def crearbow(documentos,stop_words):
     bow = CountVectorizer().fit_transform(documentos_procesados_texto)
     return bow
 
+def crearTfidf(documentos,stop_words):
+    documentos_limpios = [limpiar_texto(doc) for doc in documentos]
+    documentos_tokenizados_split = [separar(doc) for doc in documentos_limpios]
+    documentos_procesados = [procesar_tokens(doc,stop_words) for doc in documentos_tokenizados_split]
+    documentos_procesados_texto = [' '.join(doc) for doc in documentos_procesados]
+    Tfidf = TfidfVectorizer().fit_transform(documentos_procesados_texto)
+    return Tfidf
+
 def procesar_tokens(tokens,stop_words):
     stemmer = SnowballStemmer('english')
     # Eliminar stop words
