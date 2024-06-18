@@ -6,13 +6,25 @@
     <title>Resultados</title>
 </head>
 <body>
-    <h1>Resultados de búsqueda para "{{ consulta }}"</h1>
+    
+    <div class="search-container">
+        <form action="/buscar" method="post">
+            <input type="text" name="consulta" required value="{{consulta}}">
+            <button type="submit">Buscar</button>
+            <div class="radio-group">
+                <label><input type="radio" name="method" value="bow" checked> Usar BoW</label>
+                <label><input type="radio" name="method" value="tfidf"> Usar TF-IDF</label>
+            </div>
+        </form>
+
+    </div>
+
 
     {% if resultados %}
         <div class="resultados">
             {% for resultado in resultados %}
                 <div class="resultado">
-                    <h3>{{ resultado.titulo }}</h3>
+                    <h3>{{ resultado.titulo }} ({{resultado.similitud_coseno}})</h3>
                     <p>{{ resultado.contenido[:150] }}...</p> 
                 </div>
             {% endfor %}
