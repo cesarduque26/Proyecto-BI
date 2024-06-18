@@ -11,10 +11,9 @@ print(f'Se han cargado {len(documentos)} documentos.')
 stop_words=fun.cargarstopwords('../reuters/stopwords')
 print(f'Se han cargado {len(stop_words)} stopwords.')
 bow,vectorizer_bow,documentos_procesados=fun.crearbow(documentos,stop_words)
-
 print(f'Se ha creado una matriz BOW de tamaño {bow.shape}.')
-print(f'{vectorizer_bow}')
-
+Tfidf,vectorizer_tfidf=fun.crearTfidf(documentos,stop_words)
+print(f'Se ha creado una matriz Tfidf de tamaño {bow.shape}.')
 
 @app.route('/')
 
@@ -33,17 +32,16 @@ def buscar():
             titulo = lineas[0]  # La primera línea es el título
             contenido = " ".join(lineas)  # Unir todas las líneas para el contenido completo
             resultados.append({"titulo": titulo, "contenido": contenido,"similitud_coseno":similitud_cos})
-
         return render_template('resultados.html', resultados=resultados,consulta=consulta)
     else:
-        print(consulta)
-#     resultados = fun.procesar_y_buscar(consulta)
-#     return render_template('resultados.html', consulta=consulta, resultados=resultados)
-
-        data={ 'metodo':'Tfidf',
-              'consulta':consulta}
-        
-        return render_template('resultados.html', data=data)
+        respuesta=fun.buscar_Tfidf(consulta,fun.construir_indice_invertido(documentos_procesados),Tfidf,vectorizer_tfidf,stop_words)
+        resultados = []
+        for doc_id,similitud_cos in respuesta:
+            lineas = documentos[doc_id].split('\n')  # Dividir el documento en líneas
+            titulo = lineas[0]  # La primera línea es el título
+            contenido = " ".join(lineas)  # Unir todas las líneas para el contenido completo
+            resultados.append({"titulo": titulo, "contenido": contenido,"similitud_coseno":similitud_cos})
+        return render_template('resultados.html', resultados=resultados,consulta=consulta)
 
 
 if __name__ == '__main__':
