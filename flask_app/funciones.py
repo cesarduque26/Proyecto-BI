@@ -3,16 +3,18 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from nltk.stem import SnowballStemmer
 import os
+from sklearn.metrics import precision_score, recall_score, f1_score
 
 def cargar_corpus(directorio):
     # Leer el contenido de los archivos en una lista
     documentos = []
+    nombres_archivos = []
     for archivo in os.listdir(directorio):
         ruta_archivo = os.path.join(directorio, archivo)
         with open(ruta_archivo, 'r', encoding='latin-1') as f:
             documentos.append(f.read())
-
-    return documentos
+            nombres_archivos.append(int(archivo))
+    return documentos,nombres_archivos
 
 def cargarstopwords(ruta_stop_words):
     with open(ruta_stop_words, 'r', encoding='latin-1') as f:
@@ -104,3 +106,39 @@ def limpiar_texto(texto):
     # Eliminar espacios en blanco adicionales
     texto_limpio = re.sub(r'\s+', ' ', texto_limpio).strip()
     return  texto_limpio
+
+def metrica_evaluacion(consulta,respuesta,nombres_archivos,documentos):
+    # Parsear el archivo cats.txt para obtener la verdad de terreno (ground truth)
+    ruta_cats = '../reuters/cats.txt'
+    gran_verdad = {}
+
+    with open(ruta_cats, 'r', encoding='latin-1') as f:
+        for linea in f:
+            if linea.startswith('training/'):
+                partes = linea.strip().split()
+                doc_id = int(partes[0].split('/')[1])  # Obtener el ID del documento
+                categorias = partes[1:]  # Obtener las categorías
+                gran_verdad[doc_id] = categorias
+
+    categorias_consulta = consulta  # Categorías esperadas para la consulta
+    documentos_relevantes_esperados = set()
+
+    for doc_id, categorias in gran_verdad.items():
+        if any(categoria in categorias_consulta for categoria in categorias):
+            documentos_relevantes_esperados.add((doc_id))
+
+    documentos_relevantes_esperados = list(documentos_relevantes_esperados)
+    documentos_encontrados_nombres_tfidf = [int(i) for i, _ in respuesta]
+
+    documentos_relevantes_esperados_nuevo=[]
+    for id_doc in documentos_relevantes_esperados:
+        documentos_relevantes_esperados_nuevo.append(nombres_archivos.index(id_doc))
+
+    
+    # Evaluar resultados de TF-IDF
+    y_true = [1 if i in documentos_relevantes_esperados_nuevo else 0 for i in range(len(documentos))]
+    y_pred = [1 if i in documentos_encontrados_nombres_tfidf else 0 for i in range(len(documentos))]
+    precision = precision_score(y_true, y_pred)
+    recall = recall_score(y_true, y_pred)
+    f1 = f1_score(y_true, y_pred)
+    return precision,recall,f1
