@@ -16,12 +16,12 @@
             <form action="/buscar" method="post">
                 <input type="text" name="consulta" placeholder="Ingrese su consulta" required>
                 <button type="submit">Buscar</button>
-
+                <div class="radio-group">
+                    <label><input type="radio" name="method" value="bow" checked> Usar BoW</label>
+                    <label><input type="radio" name="method" value="tfidf"> Usar TF-IDF</label>
+                </div>
             </form>
-            <div class="radio-group">
-                <label><input type="radio" name="method" value="bow" checked> Usar BoW</label>
-                <label><input type="radio" name="method" value="tfidf"> Usar TF-IDF</label>
-            </div>
+
         </div>
     </div>
      

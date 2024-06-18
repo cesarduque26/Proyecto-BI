@@ -7,21 +7,22 @@ body {
     min-height: 100vh;
     background-position: center;
     /*background-color:#2b4957;*/  
+    background-color: #131921;
 }
 
-/*body::before {
+body::before {
     content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('https://www.comunidadbaratz.com/wp-content/uploads/En-el-mundo-existen-150.000.000-de-libros%E2%80%A6-y-estos-son-los-100-mejores.jpg');
+    background-image: url('/static/css/img/libros.png');
     background-size: cover;
     background-position: center;
-    opacity: 0.1;
+    opacity: 0.05;
     z-index: -1; 
-}*/
+}
 
 .content {
     flex: 1;
@@ -35,7 +36,7 @@ body {
 header {
     margin-bottom: 20px;
    /* color: white;*/
-   color: black;
+   color: white;
 }
 
 .search-container {
@@ -57,6 +58,7 @@ header {
     border: 1px solid #ccc;
     border-radius: 4px 0 0 4px;
     outline: none;
+   
 }
 
 .search-container button {
@@ -76,16 +78,20 @@ header {
 
 
 .search-container input[type="radio"] {
-   margin-top: 25px;
-   margin-left: 15px;
-    
+
+    margin-top: 5px;
+  
+    margin-left: 15px;    
 }
 
 .search-container .radio-group{
+    position: absolute;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding-right: 25px;
+    padding-right: 5px;
+    margin-top: 55px;
+    color: white;
 }
 
 footer {
