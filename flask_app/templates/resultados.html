@@ -10,12 +10,23 @@
     
     <div class="search-container">
         <form action="/buscar" method="post">
-            <input type="text" name="consulta" required value="{{consulta}}">
+            
+            <input type="text" name="consulta" required value="{{data.consulta}}">
+            
             <button type="submit">Buscar</button>
-            <div class="radio-group">
-                <label><input type="radio" name="method" value="bow" checked> Usar BoW</label>
-                <label><input type="radio" name="method" value="tfidf"> Usar TF-IDF</label>
-            </div>
+
+            {% if data.radio=='bow'%}
+                <div class="radio-group">
+                    <label><input type="radio" name="method" value="bow" checked> Usar BoW</label>
+                    <label><input type="radio" name="method" value="tfidf"> Usar TF-IDF</label>
+                </div>
+            {% endif %}
+            {% if data.radio=='tfidf'%}
+                <div class="radio-group">
+                    <label><input type="radio" name="method" value="bow"> Usar BoW</label>
+                    <label><input type="radio" name="method" value="tfidf" checked> Usar TF-IDF</label>
+                </div>
+            {% endif %}
         </form>
     <br>
     <br>

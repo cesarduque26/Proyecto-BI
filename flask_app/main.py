@@ -24,6 +24,7 @@ def index():
 def buscar():
     consulta = request.form['consulta']
     radio= request.form['method']
+    data={'consulta':consulta,'radio':radio}
     if radio=='bow':
         respuesta=fun.buscar_bow(consulta,fun.construir_indice_invertido(documentos_procesados),bow,vectorizer_bow,stop_words)
         resultados = []
@@ -32,7 +33,7 @@ def buscar():
             titulo = lineas[0]  # La primera línea es el título
             contenido = " ".join(lineas)  # Unir todas las líneas para el contenido completo
             resultados.append({"titulo": titulo, "contenido": contenido,"similitud_coseno":similitud_cos})
-        return render_template('resultados.html', resultados=resultados,consulta=consulta)
+        return render_template('resultados.html', resultados=resultados,data=data)
     else:
         respuesta=fun.buscar_Tfidf(consulta,fun.construir_indice_invertido(documentos_procesados),Tfidf,vectorizer_tfidf,stop_words)
         resultados = []
@@ -41,7 +42,7 @@ def buscar():
             titulo = lineas[0]  # La primera línea es el título
             contenido = " ".join(lineas)  # Unir todas las líneas para el contenido completo
             resultados.append({"titulo": titulo, "contenido": contenido,"similitud_coseno":similitud_cos})
-        return render_template('resultados.html', resultados=resultados,consulta=consulta)
+        return render_template('resultados.html', resultados=resultados,data=data)
 
 
 if __name__ == '__main__':
