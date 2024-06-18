@@ -6,7 +6,19 @@
     <title>Resultados</title>
 </head>
 <body>
-    se esta utilizando el metodo de busqueda: {{ data.metodo }}
-    y la consulta es: {{ data.consulta }}
+    <h1>Resultados de búsqueda para "{{ consulta }}"</h1>
+
+    {% if resultados %}
+        <div class="resultados">
+            {% for resultado in resultados %}
+                <div class="resultado">
+                    <h3>{{ resultado.titulo }}</h3>
+                    <p>{{ resultado.contenido[:150] }}...</p> 
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No se encontraron resultados.</p>
+    {% endif %}
 </body>
 </html>
