@@ -19,16 +19,19 @@ body {
 .search-container form {
     display: flex;
     margin-top: 25px;
+    justify-content: center;
+    align-items: center;
     
 }
 
 .search-container input[type="text"] {
-    width: 300px;
+    width: 400px;
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px 0 0 4px;
     outline: none;
+    min-width: 200px; 
    
 }
 
@@ -57,12 +60,8 @@ body {
 
 .search-container .radio-group{
     position: absolute;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
     padding-right: 5px;
-    margin-left: 55px;
-    margin-top: 55px;
+    margin-top: 70px;
     color: black;
 }
 
