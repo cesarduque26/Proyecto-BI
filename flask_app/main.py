@@ -20,10 +20,26 @@ def index():
 @app.route('/buscar', methods=['POST'])
 def buscar():
     consulta = request.form['consulta']
-    print(consulta)
+    radio= request.form['method']
+    if radio=='bow':
+        data={ 'metodo':'bow',
+              'consulta':consulta}
+        
+        return render_template('resultados.html', data=data)
+    
+
+
+
+
+    else:
+        print(consulta)
 #     resultados = fun.procesar_y_buscar(consulta)
 #     return render_template('resultados.html', consulta=consulta, resultados=resultados)
-    return f"Consulta recibida: {consulta}"
+
+        data={ 'metodo':'Tfidf',
+              'consulta':consulta}
+        
+        return render_template('resultados.html', data=data)
 
 
 if __name__ == '__main__':

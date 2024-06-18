@@ -35,6 +35,15 @@ def crearTfidf(documentos,stop_words):
     Tfidf = TfidfVectorizer().fit_transform(documentos_procesados_texto)
     return Tfidf
 
+def construir_indice_invertido(documentos):
+    indice_invertido = {}  # Usa un diccionario estándar
+    for doc_id, doc in enumerate(documentos):
+        for palabra in doc:
+            if palabra not in indice_invertido:
+                indice_invertido[palabra] = set()  # Inicializa un conjunto para nuevas palabras
+            indice_invertido[palabra].add(doc_id)  # Agrega el doc_id al conjunto
+    return indice_invertido
+
 def procesar_tokens(tokens,stop_words):
     stemmer = SnowballStemmer('english')
     # Eliminar stop words

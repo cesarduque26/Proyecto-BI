@@ -9,6 +9,8 @@
     <h1>Buscar Documentos</h1>
     <form action="/buscar" method="post">
         <input type="text" name="consulta" placeholder="Ingrese su consulta">
+        <input type="radio" name="method" value="bow" checked> Usar BoW
+        <input type="radio" name="method" value="tfidf"> Usar TF-IDF
         <button type="submit">Buscar</button>
     </form>
 </html>
