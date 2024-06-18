@@ -3,14 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static',filename = 'css/styles_index.css')}}">
     <title>Document</title>
 </head>
 <body>
-    <h1>Buscar Documentos</h1>
-    <form action="/buscar" method="post">
-        <input type="text" name="consulta" placeholder="Ingrese su consulta">
-        <input type="radio" name="method" value="bow" checked> Usar BoW
-        <input type="radio" name="method" value="tfidf"> Usar TF-IDF
-        <button type="submit">Buscar</button>
-    </form>
+    <div class="content">
+        <header>
+            <h1>Bienvenido al Buscador de Libros del Grupo 7</h1>
+        </header>
+        
+        <div class="search-container">
+            <form action="/buscar" method="post">
+                <input type="text" name="consulta" placeholder="Ingrese su consulta" required>
+                <button type="submit">Buscar</button>
+
+            </form>
+            <div class="radio-group">
+                <label><input type="radio" name="method" value="bow" checked> Usar BoW</label>
+                <label><input type="radio" name="method" value="tfidf"> Usar TF-IDF</label>
+            </div>
+        </div>
+    </div>
+     
+    <footer>
+        <p>&copy; 2024 Buscador de Libros Grupo:7. Todos los derechos reservados.</p>
+    </footer>
+</body>
 </html>
