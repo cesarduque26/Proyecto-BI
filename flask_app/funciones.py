@@ -20,20 +20,22 @@ def cargarstopwords(ruta_stop_words):
     return stop_words
 
 def crearbow(documentos,stop_words):
+    vectorizer_bow = CountVectorizer()
     documentos_limpios = [limpiar_texto(doc) for doc in documentos]
     documentos_tokenizados_split = [separar(doc) for doc in documentos_limpios]
     documentos_procesados = [procesar_tokens(doc,stop_words) for doc in documentos_tokenizados_split]
     documentos_procesados_texto = [' '.join(doc) for doc in documentos_procesados]
     bow = CountVectorizer().fit_transform(documentos_procesados_texto)
-    return bow
+    return bow,vectorizer_bow
 
 def crearTfidf(documentos,stop_words):
+    vectorizer_tfidf = TfidfVectorizer()
     documentos_limpios = [limpiar_texto(doc) for doc in documentos]
     documentos_tokenizados_split = [separar(doc) for doc in documentos_limpios]
     documentos_procesados = [procesar_tokens(doc,stop_words) for doc in documentos_tokenizados_split]
     documentos_procesados_texto = [' '.join(doc) for doc in documentos_procesados]
     Tfidf = TfidfVectorizer().fit_transform(documentos_procesados_texto)
-    return Tfidf
+    return Tfidf,vectorizer_tfidf
 
 def construir_indice_invertido(documentos):
     indice_invertido = {}  # Usa un diccionario estándar
@@ -43,6 +45,35 @@ def construir_indice_invertido(documentos):
                 indice_invertido[palabra] = set()  # Inicializa un conjunto para nuevas palabras
             indice_invertido[palabra].add(doc_id)  # Agrega el doc_id al conjunto
     return indice_invertido
+
+def buscar_bow(consulta,indice_invertido,bow,vectorizer_bow,stop_words):
+    # Procesar la consulta
+    consulta_procesada = procesar_tokens(separar(limpiar_texto(consulta)),stop_words)
+
+    consulta_vector = vectorizer_bow.transform([' '.join(consulta_procesada)])
+
+    documentos_relevantes = documentos_relevantes(consulta_procesada,indice_invertido)
+    
+    #realizar la matriz de similitud
+
+    bow_2 = bow[list(documentos_relevantes)]
+    # Calcular similitud coseno
+    similitud_coseno = cosine_similarity(consulta_vector, bow_2).flatten()
+    similitud_coseno_id = [(doc_id, similitud_coseno[id]) for id, doc_id in enumerate (documentos_relevantes)]
+    similitud_coseno_id.sort(key=lambda x: x[1], reverse=True)
+    
+    return documentos_relevantes[:10]
+
+def documentos_relevantes(consulta_procesada,indice_invertido):
+    # Inicializar un conjunto con los IDs de los documentos relevantes
+    documentos_relevantes = set()
+    # Iterar sobre cada palabra de la consulta
+    for palabra in consulta_procesada:
+        # Buscar la palabra en el índice invertido
+        if palabra in indice_invertido:
+            # Agregar los IDs de los documentos que contienen la palabra al conjunto de documentos relevantes
+            documentos_relevantes.update(indice_invertido[palabra])
+    return documentos_relevantes
 
 def procesar_tokens(tokens,stop_words):
     stemmer = SnowballStemmer('english')
