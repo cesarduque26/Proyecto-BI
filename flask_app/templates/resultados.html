@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static',filename = 'css/styles_resultados.css')}}">
     <title>Resultados</title>
 </head>
 <body>
@@ -16,7 +17,8 @@
                 <label><input type="radio" name="method" value="tfidf"> Usar TF-IDF</label>
             </div>
         </form>
-
+    <br>
+    <br>
     </div>
 
 
@@ -32,5 +34,10 @@
     {% else %}
         <p>No se encontraron resultados.</p>
     {% endif %}
+
+         
+    <footer>
+        <p>&copy; 2024 Buscador de Libros Grupo:7. Todos los derechos reservados.</p>
+    </footer>
 </body>
 </html>
