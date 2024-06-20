@@ -5,30 +5,6 @@ from nltk.stem import SnowballStemmer
 from sklearn.metrics import precision_score, recall_score, f1_score
 
 
-def crearbow(documentos, stop_words):
-    vectorizer_bow = CountVectorizer()
-    documentos_limpios = [limpiar_texto(doc) for doc in documentos]
-    documentos_tokenizados_split = [separar(doc) for doc in documentos_limpios]
-    documentos_procesados = [procesar_tokens(
-        doc, stop_words) for doc in documentos_tokenizados_split]
-    documentos_procesados_texto = [
-        ' '.join(doc) for doc in documentos_procesados]
-    bow = vectorizer_bow.fit_transform(documentos_procesados_texto)
-    return bow, vectorizer_bow, documentos_procesados
-
-
-def crearTfidf(documentos, stop_words):
-    vectorizer_tfidf = TfidfVectorizer()
-    documentos_limpios = [limpiar_texto(doc) for doc in documentos]
-    documentos_tokenizados_split = [separar(doc) for doc in documentos_limpios]
-    documentos_procesados = [procesar_tokens(
-        doc, stop_words) for doc in documentos_tokenizados_split]
-    documentos_procesados_texto = [
-        ' '.join(doc) for doc in documentos_procesados]
-    Tfidf = vectorizer_tfidf.fit_transform(documentos_procesados_texto)
-    return Tfidf, vectorizer_tfidf
-
-
 def construir_indice_invertido(documentos):
     indice_invertido = {}  # Usa un diccionario estándar
     for doc_id, doc in enumerate(documentos):
@@ -41,41 +17,7 @@ def construir_indice_invertido(documentos):
     return indice_invertido
 
 
-def buscar_bow(consulta, indice_invertido, bow, vectorizer_bow, stop_words):
-    # Procesar la consulta
-    consulta_procesada = procesar_tokens(
-        separar(limpiar_texto(consulta)), stop_words)
-    consulta_vector = vectorizer_bow.transform([' '.join(consulta_procesada)])
-    documentos_relevantes = obtener_documentos_relevantes(
-        consulta_procesada, indice_invertido)
-    # realizar la matriz de similitud
-    bow_2 = bow[list(documentos_relevantes)]
-    # Calcular similitud coseno
-    similitud_coseno = cosine_similarity(consulta_vector, bow_2).flatten()
-    similitud_coseno_id = [(doc_id, similitud_coseno[id])
-                           for id, doc_id in enumerate(documentos_relevantes)]
-    similitud_coseno_id.sort(key=lambda x: x[1], reverse=True)
 
-    return similitud_coseno_id[:10]
-
-
-def buscar_Tfidf(consulta, indice_invertido, Tfidf, vectorizer_tfidf, stop_words):
-    # Procesar la consulta
-    consulta_procesada = procesar_tokens(
-        separar(limpiar_texto(consulta)), stop_words)
-    consulta_vector = vectorizer_tfidf.transform(
-        [' '.join(consulta_procesada)])
-    documentos_relevantes = obtener_documentos_relevantes(
-        consulta_procesada, indice_invertido)
-    # realizar la matriz de similitud
-    Tfidf2 = Tfidf[list(documentos_relevantes)]
-    # Calcular similitud coseno
-    similitud_coseno = cosine_similarity(consulta_vector, Tfidf2).flatten()
-    similitud_coseno_id = [(doc_id, similitud_coseno[id])
-                           for id, doc_id in enumerate(documentos_relevantes)]
-    similitud_coseno_id.sort(key=lambda x: x[1], reverse=True)
-
-    return similitud_coseno_id[:10]
 
 
 def obtener_documentos_relevantes(consulta_procesada, indice_invertido):
