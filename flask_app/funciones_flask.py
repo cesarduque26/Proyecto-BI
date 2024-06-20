@@ -1,23 +1,26 @@
 import re
+from sklearn.metrics import jaccard_score
 from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from nltk.stem import SnowballStemmer
-from sklearn.metrics import precision_score, recall_score, f1_score
 
-def buscar_bow(consulta,indice_invertido,bow,vectorizer_bow,stop_words):
+def buscar_bow(consulta,indice_invertido,matriz_bow,vectorizer_bow,stop_words):
     # Procesar la consulta
     consulta_procesada = procesar_tokens(separar(limpiar_texto(consulta)),stop_words)
-    consulta_vector = vectorizer_bow.transform([' '.join(consulta_procesada)])
     documentos_relevantes = obtener_documentos_relevantes(consulta_procesada,indice_invertido)
-    #realizar la matriz de similitud
-    bow_2 = bow[list(documentos_relevantes)]
-    # Calcular similitud coseno
-    similitud_coseno = cosine_similarity(consulta_vector, bow_2).flatten()
-    similitud_coseno_id = [(doc_id, similitud_coseno[id]) for id, doc_id in enumerate (documentos_relevantes)]
-    similitud_coseno_id.sort(key=lambda x: x[1], reverse=True)
+    if documentos_relevantes:
+        consulta_vector = vectorizer_bow.transform([' '.join(consulta_procesada)]).toarray().flatten()
+        #realizar la matriz de similitud
+        bow_filtrada = matriz_bow[list(documentos_relevantes)].toarray()
+        # Calcular jaccard
+        similitud_jaccard=[]
+        for id_doc,fila in zip(documentos_relevantes,bow_filtrada):
+            valor=jaccard_score(consulta_vector, fila, average='binary')
+            similitud_jaccard.append((id_doc,float(valor)))
+        similitud_jaccard.sort(key=lambda x: x[1], reverse=True)
+        return similitud_jaccard[:10]
+    else:
+        return []
     
-    return similitud_coseno_id[:10]
-
 def buscar_Tfidf(consulta,indice_invertido,Tfidf,vectorizer_tfidf,stop_words):
     # Procesar la consulta
     consulta_procesada = procesar_tokens(separar(limpiar_texto(consulta)),stop_words)

@@ -20,16 +20,6 @@ matriz_tfidf = datos['matriz_tfidf']
 vectorizer_bow = datos['vectorizer_bow']
 vectorizer_tfidf = datos['vectorizer_tfidf']
 
-
-# documentos,nombres_archivos=fun.cargar_corpus('../reuters/training/')
-# print(f'Se han cargado {len(documentos)} documentos.')
-# stop_words=fun.cargarstopwords('../reuters/stopwords')
-# print(f'Se han cargado {len(stop_words)} stopwords.')
-# bow,vectorizer_bow,documentos_procesados=fun.crearbow(documentos,stop_words)
-# print(f'Se ha creado una matriz BOW de tamaño {bow.shape}.')
-# Tfidf,vectorizer_tfidf=fun.crearTfidf(documentos,stop_words)
-# print(f'Se ha creado una matriz Tfidf de tamaño {bow.shape}.')
-
 @app.route('/')
 
 def index():
